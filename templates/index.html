@@ -4,113 +4,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bread Demand Predictor</title>
+    <title>Essay Writing Helper</title>
     <!-- Bootstrap CSS -->
-    <link 
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
-        rel="stylesheet" 
-        integrity="sha384-MCw98SFnGE8fJT3GXwEhtPH1b4U4fY4sQ8aP3mX4yl3gFJpBHaEWldH/a5GkF6a7" 
-        crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
+            font-family: 'Roboto', sans-serif;
             background-color: #f8f9fa;
-            background-image: url('https://images.unsplash.com/photo-1571532912573-8b47ec56f3e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 30px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            margin-bottom: 10px;
         }
         .container {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            max-width: 900px;
         }
-        .card {
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 500px;
-            width: 100%;
+        .btn-custom {
+            background-color: #007bff;
+            color: #ffffff;
         }
-        .logo {
+        .btn-custom:hover {
+            background-color: #0056b3;
+            color: #ffffff;
+        }
+        .feedback-section {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .footer {
+            margin-top: 60px;
+            padding: 20px 0;
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+        }
+        .clipart {
             width: 100px;
-            margin: 0 auto 20px auto;
-            display: block;
-        }
-        .result {
-            margin-top: 20px;
+            margin: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
+    <div class="header">
+        <h1>Essay Writing Helper</h1>
+        <p>Improve your essays with detailed feedback</p>
+    </div>
+
     <div class="container">
-        <div class="card text-center">
-            <img src="https://img.icons8.com/fluency/96/000000/bread.png" alt="Bread Logo" class="logo">
-            <h2 class="mb-4">Bread Demand Predictor</h2>
-            <form id="upload-form">
-                <div class="form-group">
-                    <label for="csvFile">Upload Sales CSV</label>
-                    <input type="file" class="form-control-file" id="csvFile" accept=".csv" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Get Prediction</button>
-            </form>
-            <div class="result">
-                <h4 id="prediction" class="text-success"></h4>
-                <p id="error" class="text-danger"></p>
+        <div class="mb-4 text-center">
+            <img src="https://img.icons8.com/color/96/000000/idea-sharing.png" alt="Writing Helper" class="clipart">
+        </div>
+        <div class="mb-3">
+            <button id="loadExample" class="btn btn-secondary">Load Example Essay</button>
+        </div>
+        <div class="mb-3">
+            <label for="essayInput" class="form-label">Your Essay</label>
+            <textarea class="form-control" id="essayInput" rows="10" placeholder="Type or paste your essay here..."></textarea>
+        </div>
+        <div class="mb-3 text-end">
+            <button id="getFeedback" class="btn btn-custom">Get Feedback</button>
+        </div>
+        <hr>
+        <div class="feedback-section">
+            <h4>Feedback</h4>
+            <div id="feedbackOutput" class="mt-3">
+                <p>Your feedback will appear here...</p>
             </div>
         </div>
     </div>
 
-    <!-- jQuery and Bootstrap JS -->
-    <script 
-        src="https://code.jquery.com/jquery-3.5.1.min.js" 
-        integrity="sha384-ZvpUoO/+Pw5y+EAkQa9moRniA3YB+Otbsx14R9JkGF6n5vGq9gfVMeHwSpnT+76J" 
-        crossorigin="anonymous">
-    </script>
-    <script 
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" 
-        integrity="sha384-LtrjvnR4GeARYnZ3A2bKPEP1Y1iSMcif0nK4DuU4nHvj4G4Sba5f3E89Zk7sn;" 
-        crossorigin="anonymous">
-    </script>
-    <script>
-        document.getElementById('upload-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const fileInput = document.getElementById('csvFile');
-            const file = fileInput.files[0];
-            const predictionElement = document.getElementById('prediction');
-            const errorElement = document.getElementById('error');
-            predictionElement.textContent = '';
-            errorElement.textContent = '';
+    <div class="footer">
+        &copy; 2023 Essay Writing Helper. All rights reserved.
+    </div>
 
-            if (!file) {
-                errorElement.textContent = 'Please select a CSV file to upload.';
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script>
+        document.getElementById('loadExample').addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://localhost:5000/example');
+                const data = await response.json();
+                document.getElementById('essayInput').value = data.example;
+            } catch (error) {
+                alert('Failed to load example essay.');
+                console.error(error);
+            }
+        });
+
+        document.getElementById('getFeedback').addEventListener('click', async () => {
+            const essay = document.getElementById('essayInput').value.trim();
+            if (!essay) {
+                alert('Please enter an essay to get feedback.');
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('file', file);
+            document.getElementById('feedbackOutput').innerHTML = '<p>Loading feedback...</p>';
 
-            fetch('http://localhost:5000/predict', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.prediction) {
-                    predictionElement.textContent = `Recommended Bread Production for Tomorrow: ${data.prediction} units.`;
-                } else if (data.error) {
-                    errorElement.textContent = `Error: ${data.error}`;
-                } else {
-                    errorElement.textContent = 'An unexpected error occurred.';
+            try {
+                const response = await fetch('http://localhost:5000/get_feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ essay })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    document.getElementById('feedbackOutput').innerHTML = `<p class="text-danger">${errorData.error}</p>`;
+                    return;
                 }
-            })
-            .catch(error => {
-                errorElement.textContent = `Error: ${error.message}`;
-            });
+
+                const data = await response.json();
+                document.getElementById('feedbackOutput').innerHTML = `<p>${data.feedback}</p>`;
+            } catch (error) {
+                document.getElementById('feedbackOutput').innerHTML = '<p class="text-danger">Failed to retrieve feedback.</p>';
+                console.error(error);
+            }
         });
     </script>
 </body>

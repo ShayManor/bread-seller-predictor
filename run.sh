@@ -1,18 +1,15 @@
 
 #!/bin/bash
 
-# Ensure virtual environment is active or create it if not
-if [ ! -d "venv" ]; then
-    python3 -m venv venv
+# Check if pip is installed, if not install it
+if ! command -v pip &> /dev/null
+then
+    echo "pip could not be found, installing pip..."
+    apt-get update
+    apt-get install python3-pip -y
 fi
 
-# Activate virtual environment
-source venv/bin/activate
-
-# Upgrade pip
-pip install --upgrade pip
-
-# Install required packages
+# Install required Python packages from requirements.txt
 pip install -r requirements.txt
 
 # Run the Flask application
